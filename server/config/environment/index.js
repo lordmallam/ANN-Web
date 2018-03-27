@@ -57,7 +57,8 @@ var all = {
     username: 'ncas@nigerianbar.org.ng',
     password: 'CERT@nba2017'
   },
-  clientURL: 'http://localhost:9000/'
+  clientURL: 'http://ann.westeurope.cloudapp.azure.com/'
+  //clientURL: 'http://localhost:9000/'
 };
 
 // Export the config object based on the NODE_ENV
