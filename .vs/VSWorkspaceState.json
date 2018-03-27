@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\dist\\server",
+    "\\dist\\server\\config",
+    "\\dist\\server\\config\\environment",
     "\\server",
-    "\\server\\api",
     "\\server\\api\\member",
     "\\server\\api\\prospect",
     "\\server\\api\\user",
-    "\\server\\components",
     "\\server\\components\\db",
-    "\\server\\config",
-    "\\server\\config\\environment"
+    "\\server\\config"
   ],
-  "SelectedNode": "\\server\\api\\member\\member.model.js",
+  "SelectedNode": "\\server\\index.js",
   "PreviewInSolutionExplorer": false
 }
