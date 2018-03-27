@@ -46,7 +46,7 @@ var all = {
   },
   couchdb: {
     //url: 'http://admin:Password1@localhost:5984/',
-    url: 'http://ann.westeurope.cloudapp.azure.com:5984/',
+    url: 'http://annadmin:password@ann.westeurope.cloudapp.azure.com:5984/',
     dbName: 'ann_db',
     dbUser: '_users'
   },
