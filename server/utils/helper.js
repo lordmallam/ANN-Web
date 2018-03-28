@@ -29,7 +29,7 @@ const createRandomString = length => {
 const sendActivationMail = (email, name, ac, isMobile) => {
   let url = `${config.clientURL}confirmation/${ac}`;
   if (isMobile) {
-    url = `${config.clientURL}confirmation/${ac}/mobile`
+    url = `${config.clientURL}confirmation/${ac}/xyz/mobile`
   }
   const HTMLmail = activationMail.replace('[MEMBER_NAME]', name).replace('[AC_URL]', url);
   let mailOptions = {
