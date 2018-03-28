@@ -14,6 +14,7 @@ function route(auth) {
   router.get('/:id', auth.isAuthenticated(), controller.me);
   router.put('/:id', auth.isAuthenticated(), controller.update);
   router.get('/by-email/:email', controller.byEmail);
+  router.get('/image/:id', controller.getImage);
   return router;
 }
 

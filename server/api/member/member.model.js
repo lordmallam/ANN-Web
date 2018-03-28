@@ -225,6 +225,15 @@ const updateProfile = (member, id) => (new Promise((resolve, reject) => {
   }
 }));
 
+const getImageById = id => (new Promise((resolve, reject) => {
+  getById(id)
+  .then(res => {
+    resolve({image:
+      res._attachments && res._attachments['profile-pic.png'] && res._attachments['profile-pic.png'].data})
+  })
+  .catch(err => reject(err))
+}));
+
 const isValidMemberObj = member => (
   !isEmpty(member.firstname) && !isEmpty(member.surname) && !isEmpty(member.dateOfBirth) && !isEmpty(member.sex)
   && !isEmpty(member.phone) && !isEmpty(member.email) && !isEmpty(member.state) && !isEmpty(member.lga) &&
@@ -239,5 +248,6 @@ export {
   newAgentMember,
   allMembers,
   updateProfile,
-  getByEmail
+  getByEmail,
+  getImageById
 };

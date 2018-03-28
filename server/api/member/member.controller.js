@@ -14,7 +14,8 @@ import {
   newAgentMember,
   allMembers,
   updateProfile,
-  getByEmail
+  getByEmail,
+  getImageById
 } from './member.model';
 
 // Gets a list of Members
@@ -81,3 +82,11 @@ export const byEmail = (req, res, next) => {
     .then(res.json.bind(res))
     .catch(next);
 };
+
+export const getImage = (req, res, next) => {
+  const id = req.params.id;
+  getImageById(id)
+    .then(res.json.bind(res))
+    .catch(next);
+};
+
