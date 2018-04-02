@@ -1,7 +1,7 @@
 'use strict';
 import _ from 'lodash';
 
-import { registerUser, registerAgent, allAgents } from './user.model';
+import { registerUser, registerAgent, allAgents, getByMemberId, assignAgent, removeAgent } from './user.model';
 
 // Gets a list of Users
 const index = (req, res) => {
@@ -24,14 +24,29 @@ const registerA = (req, res, next) => {
 
 const getAllAgents = (req, res, next) => {
   allAgents()
-    .then(agentRows => {
-      let agents = agentRows.rows.filter(rec => (rec.doc.type === 'user' && rec.doc.roles.includes('ums_role_agent') && !rec.deleted)).map(rec => {
-        const r = _.omit(rec.doc, ['salt', 'password_scheme', 'iterations', 'derived_key'])
-        return r
-      });
-      res.send(agents)
-    })
+    .then(res.json.bind(res))
     .catch(next);
 };
 
-export { index, register, registerA, getAllAgents };
+const getMemberId = (req, res, next) => {
+  const id = req.params.id;
+  getByMemberId(id)
+    .then(res.json.bind(res))
+    .catch(next);
+};
+
+const getAssignAgent = (req, res, next) => {
+  const id = req.params.id;
+  assignAgent(id)
+    .then(res.json.bind(res))
+    .catch(next);
+};
+
+const getRemoveAgent = (req, res, next) => {
+  const id = req.params.id;
+  removeAgent(id)
+    .then(res.json.bind(res))
+    .catch(next);
+};
+
+export { index, register, registerA, getAllAgents, getMemberId, getAssignAgent, getRemoveAgent };

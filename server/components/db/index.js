@@ -70,7 +70,12 @@ const updateDoc = (doc, updatedDoc, ...propsToDelete) => {
   return saveDoc(omit(finalDoc, propsToDelete));
 };
 
-const deleteDoc = (id, rev) => db.remove(id, rev).then(res => res);
+const deleteDoc = id => (new Promise((resolve, reject) => {
+  db.get(id).then(doc => {
+    doc.is_deleted = true;
+    resolve(db.put(doc));
+  });
+}));
 
 const getView = (view, key, includeDocs = true) =>
   fetchView(view, key, includeDocs)

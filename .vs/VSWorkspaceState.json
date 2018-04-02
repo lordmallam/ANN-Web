@@ -1,17 +1,21 @@
 {
   "ExpandedNodes": [
     "",
+    "\\node_modules",
+    "\\node_modules\\@ehealthafrica",
     "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis",
     "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\dist",
     "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\dist\\src",
-    "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\dist\\src\\users",
-    "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\src",
-    "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\src\\services\\auth",
-    "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\src\\users",
+    "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\dist\\src\\helpers",
+    "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\dist\\src\\services",
+    "\\node_modules\\@ehealthafrica\\express-couchdb-ums-apis\\dist\\src\\services\\auth",
     "\\server",
     "\\server\\api",
-    "\\server\\api\\state"
+    "\\server\\api\\member",
+    "\\server\\api\\prospect",
+    "\\server\\config",
+    "\\server\\config\\environment"
   ],
-  "SelectedNode": "\\server\\api\\state\\state.model.js",
+  "SelectedNode": "\\server\\components\\db\\constants.js",
   "PreviewInSolutionExplorer": false
 }

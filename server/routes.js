@@ -15,7 +15,7 @@ import prospectsRoute from './api/prospect';
 export default function routes(auth) {
   const router = express.Router();
   router.use('/', openRoutes);
-  router.use('/users', userRoutes);
+  router.use('/users', userRoutes(auth));
   router.use('/members', memberRoutes(auth));
   router.use('/states', stateRoutes);
   router.use('/lgas', lgasRoutes);

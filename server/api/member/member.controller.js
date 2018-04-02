@@ -15,7 +15,9 @@ import {
   allMembers,
   updateProfile,
   getByEmail,
-  getImageById
+  getImageById,
+  getByMemberId,
+  memberDelete
 } from './member.model';
 
 // Gets a list of Members
@@ -51,7 +53,7 @@ export const byActivationCode = (req, res, next) => {
   getByActivationCode(ac)
     .then(res.json.bind(res))
     .catch(next);
-}; 
+};
 
 export const confirmation = (req, res, next) => {
   const payload = req.body;
@@ -90,3 +92,16 @@ export const getImage = (req, res, next) => {
     .catch(next);
 };
 
+export const byMemberId = (req, res, next) => {
+  const id = req.params.id;
+  getByMemberId(id)
+    .then(res.json.bind(res))
+    .catch(next);
+};
+
+export const deleteMember = (req, res, next) => {
+  const id = req.params.id;
+  memberDelete(id)
+    .then(res.json.bind(res))
+    .catch(next);
+};

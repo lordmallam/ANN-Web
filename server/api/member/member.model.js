@@ -3,9 +3,10 @@ import _ from 'lodash';
 import config from '../../config/environment';
 import { BadRequestError, NotFoundError } from '../../utils/errors';
 import { createRandomString, sendActivationMail, isEmpty, sendMemberMail } from '../../utils/helper';
-import { getView, saveDoc, getDocById, updateDoc, getViewWithAttachments } from '../../components/db';
+import { getView, saveDoc, getDocById, updateDoc, getViewWithAttachments, deleteDoc } from '../../components/db';
 import { DB_VIEWS, DOC_TYPES } from '../../components/db/constants'
 import { registerUser } from '../user/user.model';
+import { generateMemberID, generatePernamentMemberID } from '../../utils/helper';
 
 const { url, dbName} = config.couchdb;
 
@@ -36,20 +37,26 @@ const newMember = user => (new Promise((resolve, reject) => {
             reject(new BadRequestError('A member is already registered with the provided email'))
           }
         } else {
-          const memberDoc = user;
+          let memberDoc = user;
+          memberDoc = _.omit(memberDoc, ['_id', '_rev'])
           memberDoc.doc_type = DOC_TYPES.member;
           memberDoc.status = 'started';
           memberDoc.activationCode = createRandomString(64);
-          saveDoc(memberDoc, true)
-            .then(res => {
-              if (memberDoc.isMobile) {
-                sendActivationMail(memberDoc.email, memberDoc.firstname, memberDoc.activationCode, true);
-              } else {
-                sendActivationMail(memberDoc.email, memberDoc.firstname, memberDoc.activationCode);
-              }
-              resolve(res);
+          getMemberId()
+            .then(u => {
+              memberDoc.memberId = u;
+              saveDoc(memberDoc, true)
+                .then(res => {
+                  if (memberDoc.isMobile) {
+                    sendActivationMail(memberDoc.email, memberDoc.firstname, memberDoc.activationCode, true);
+                  } else {
+                    sendActivationMail(memberDoc.email, memberDoc.firstname, memberDoc.activationCode);
+                  }
+                  resolve(res);
+                })
+                .catch(err => reject(err));
             })
-            .catch(err => reject(err));
+            .catch(err => reject(err))
         }
       })
       .catch(err => {
@@ -195,13 +202,13 @@ const confirmMember = (member, ac) => (new Promise((resolve, reject) => {
         };
         registerUser(user)
           .then(r => {
-            member = _.omit(member, ['email', '_id', '_rev']);
+            member = _.omit(member, ['email', '_id', '_rev', 'memberId']);
             member.status = 'completed';
             m = _.omit(m, 'password');
             m.activationCode = createRandomString(64);
-              updateDoc(m, member)
-                .then(update => resolve(update))
-                .catch(err => reject(err));
+            updateDoc(m, member)
+              .then(update => resolve(update))
+              .catch(err => reject(err));
           })
           .catch(err => reject(err));
       })
@@ -210,12 +217,29 @@ const confirmMember = (member, ac) => (new Promise((resolve, reject) => {
   }
 }));
 
+const getMemberId = id => (new Promise((resolve) => {
+  let memberid = generateMemberID(true)
+  if (id)
+    memberid = id
+  getView(DB_VIEWS.member.byMemberId, memberid)
+    .then(res => {
+      if (res.length)
+        resolve(getMemberId())
+      else
+        resolve(memberid)
+    })
+    .catch(() => {
+      resolve(getMemberId())
+    });
+}));
+
 const updateProfile = (member, id) => (new Promise((resolve, reject) => {
   if (!isValidMemberObj(member)) {
     reject(new BadRequestError('Fill all complusary fields correctly'));
   } else {
     getViewWithAttachments(DB_VIEWS.member.byId, id, true, true)
       .then(m_doc => {
+        member = _.omit(member, ['email', '_id', '_rev', 'memberId']);
         member.activationCode = createRandomString(64);
         updateDoc(m_doc, member)
           .then(update => resolve(update))
@@ -239,6 +263,20 @@ const isValidMemberObj = member => (
   && !isEmpty(member.phone) && !isEmpty(member.email) && !isEmpty(member.state) && !isEmpty(member.lga) &&
   !isEmpty(member.residenceAddress) && member.nok !== {});
 
+const getByMemberId = id => (new Promise((resolve, reject) => {
+  getViewWithAttachments(DB_VIEWS.member.byMemberId, id, true, true)
+    .then(res => {
+      if (res.length) {
+        resolve(_.first(res).doc);
+      } else {
+        reject(new NotFoundError('Member ID not found', 'Not Found', 404));
+      }
+    })
+    .catch(err => reject(err));
+}));
+
+const memberDelete = id => deleteDoc(id);
+
 export {
   newMember,
   resendActivationMail,
@@ -249,5 +287,7 @@ export {
   allMembers,
   updateProfile,
   getByEmail,
-  getImageById
+  getImageById,
+  getByMemberId,
+  memberDelete
 };
