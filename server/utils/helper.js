@@ -20,6 +20,40 @@ const generateID = (prefix, number) => {
   return `${prefix}${processedNumber}`;
 };
 
+const generateMemberID = (reverse = false, length = 8) => {
+  let num = ''
+  let alp = ''
+  const min = Math.ceil(0);
+  const max = Math.floor(9);
+  for (var i = 0; i < length; i++) {
+    num += Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+  do {
+    for (var i = 0; i < 3; i++)
+      alp += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  while (alp === 'ANN')
+
+  if (reverse)
+    return `${alp}${num}`
+  else
+    return `${num}${alp}`
+};
+
+const generatePernamentMemberID = (length = 8) => {
+  let num = ''
+  let alp = 'ANN'
+  const min = Math.ceil(0);
+  const max = Math.floor(9);
+  for (var i = 0; i < length; i++) {
+    num += Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
+  return `${alp}${num}`
+};
+
 const createRandomString = length => {
   let str = '';
   for (; str.length < length; str += Math.random().toString(36).substr(2));
@@ -124,5 +158,7 @@ export {
   createRandomString,
   sendActivationMail,
   isEmpty,
-  sendMemberMail
+  sendMemberMail,
+  generateMemberID,
+  generatePernamentMemberID
 };

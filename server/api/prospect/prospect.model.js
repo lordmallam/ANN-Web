@@ -20,18 +20,38 @@ const allProspects = () => (new Promise((resolve, reject) => {
 const approveProspect = Id => (new Promise((resolve, reject) => {
   getViewWithAttachments(DB_VIEWS.prospect.byId, Id, true, true)
     .then(res => {
-      const prospect = _.first(res.map(rec => (rec.doc)));
+      let prospect = _.first(res.map(rec => (rec.doc)));
       newMember(prospect)
         .then(res => {
-          prospect.is_deleted = true;
-          prospect.approvedOn = new Date();
-          updateDoc(prospect, prospect)
+          const newValues = {
+            is_deleted: true,
+            approvedOn: new Date(),
+            status: 'approved'
+          }
+          updateDoc(prospect, newValues)
+            .then(res => resolve(allProspects()))
             .catch(err => console.log(err));
-          resolve(res);
         })
         .catch(err => reject(err))
     })
     .catch(err => reject(err))
 }));
 
-export { allProspects, approveProspect };
+
+const declineProspect = Id => (new Promise((resolve, reject) => {
+  getView(DB_VIEWS.prospect.byId, Id)
+    .then(res => {
+      let prospect = _.first(res.map(rec => (rec.doc)));
+      const newValues = {
+        is_deleted: true,
+        declinedOn: new Date(),
+        status: 'declined'
+      }
+      updateDoc(prospect, newValues)
+        .then(res => resolve(allProspects()))
+        .catch(err => console.log(err));
+    })
+    .catch(err => reject(err))
+}));
+
+export { allProspects, approveProspect, declineProspect };
