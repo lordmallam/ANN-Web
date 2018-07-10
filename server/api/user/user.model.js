@@ -95,7 +95,7 @@ const getByMemberId = (id, internal) => {
 };
 
 const assignAgent = memberid => (new Promise((resolve, reject) => {
-  getByMemberId(memberid)
+  getByMemberId(memberid, true)
     .then(res => {
       if (res.roles.includes('ums_role_agent'))
         reject(new BadRequestError('User is already an agent', 'Bad Request', 400))
@@ -112,7 +112,7 @@ const assignAgent = memberid => (new Promise((resolve, reject) => {
 }));
 
 const removeAgent = memberid => (new Promise((resolve, reject) => {
-  getByMemberId(memberid)
+  getByMemberId(memberid, true)
     .then(res => {
       if (!res.roles.includes('ums_role_agent'))
         reject(new BadRequestError('User is not an agent', 'Bad Request', 400))
