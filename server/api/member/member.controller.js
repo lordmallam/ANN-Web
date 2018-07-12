@@ -116,6 +116,6 @@ export const requestPasswordReset = (req, res, next) => {
     .then(res.json.bind(res))
     .catch(err => {
       err.extra = URL
-      err.json.bind(res)
+      return err
     })
 }
