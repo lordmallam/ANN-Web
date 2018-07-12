@@ -112,6 +112,8 @@ export const deleteMember = (req, res, next) => {
 export const requestPasswordReset = (req, res, next) => {
   const id = req.params.id;
   axios.post(`${config.clientURL}/ums/users/request-password-reset`, {id})
-    .then(res.json.bind(res))
-    .catch(next)
+    .then(r => {res.send(r.json())})
+    .catch(err => {
+      res.send(err)
+    })
 }
