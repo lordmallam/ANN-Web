@@ -19,6 +19,7 @@ import {
   getByMemberId,
   memberDelete
 } from './member.model';
+import config from '../../config/environment';
 
 import axios from 'axios'
 
@@ -110,7 +111,7 @@ export const deleteMember = (req, res, next) => {
 
 export const requestPasswordReset = (req, res, next) => {
   const id = req.params.id;
-  axios.post('/ums/users/request-password-reset', {id})
+  axios.post(`${config.clientURL}/ums/users/request-password-reset`, {id})
     .then(res.json.bind(res))
     .catch(next)
 }
