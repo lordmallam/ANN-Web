@@ -32,7 +32,8 @@ const { authService } = ums(app, undefined,
     appDBName: config.couchdb.dbName,
     secret: config.secrets.session,
     emailConfig: {},
-    sendEmails: false
+    sendEmails: false,
+    appUrl: config.clientURL
   });
 
 app.use('/api', routes(authService));
