@@ -20,6 +20,8 @@ import {
   memberDelete
 } from './member.model';
 
+import axios from 'axios'
+
 // Gets a list of Members
 export function index(req, res, next) {
   allMembers()
@@ -105,3 +107,10 @@ export const deleteMember = (req, res, next) => {
     .then(res.json.bind(res))
     .catch(next);
 };
+
+export const requestPasswordReset = (req, res, next) => {
+  const id = req.params.id;
+  axios.post('/ums/users/request-password-reset', {id})
+    .then(res.json.bind(res))
+    .catch(next)
+}
