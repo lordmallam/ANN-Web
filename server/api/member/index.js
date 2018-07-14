@@ -8,6 +8,7 @@ function route(auth) {
   router.get('/', controller.index);
   router.post('/register', controller.register);
   router.post('/request-password-reset', controller.requestPasswordReset);
+  router.post('/password-reset', controller.passwordReset);
   router.post('/agent/register', controller.agentRegister);
   router.get('/register/resend/:id', controller.sendActivationMail);
   router.get('/register/activation/:ac', controller.byActivationCode);

@@ -20,6 +20,7 @@ import {
   memberDelete
 } from './member.model';
 import config from '../../config/environment';
+import { sendResetMail } from '../../utils/helper';
 
 import axios from 'axios'
 
@@ -113,7 +114,20 @@ export const requestPasswordReset = (req, res, next) => {
   const id = req.body.id;
   axios.post(`${config.clientURL}ums/users/request-password-reset`, {id})
     .then(r => {
-      res.send(r.data)
+      sendResetMail(id, r.data.id)
+      res.send(`Password reset email sent to ${id}`)
+    })
+    .catch(err => {
+      next(err)
+    })
+}
+
+export const passwordReset = (req, res, next) => {
+  const token = req.body.token;
+  const password = req.body.password;
+  axios.post(`${config.clientURL}ums/users/reset-password`, {token, password})
+    .then(r => {
+      res.send(`Password reset for ${r.name}`)
     })
     .catch(err => {
       next(err)

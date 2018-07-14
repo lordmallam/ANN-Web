@@ -80,6 +80,23 @@ const sendActivationMail = (email, name, ac, isMobile) => {
   });
 };
 
+const sendResetMail = (email, code) => {
+  let url = `${config.clientURL}request-reset/password/${code}`;
+  const HTMLmail = resetMail.replace('[RESET_URL]', url);
+  let mailOptions = {
+    from: config.SMTP.username,
+    to: email,
+    subject: 'ANN Password Reset',
+    html: HTMLmail
+  };
+  
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+  });
+};
+
 const sendMemberMail = (email, name, ac) => {
   const url = `${config.clientURL}`;
   const HTMLmail = memberMail.replace('[MEMBER_NAME]', name).replace('[AC_URL]', url);
@@ -126,6 +143,34 @@ const activationMail = `<html xmlns="http://www.w3.org/1999/xhtml">
 </html>`;
 
 
+const resetMail = `<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <form id="form1">
+        <div style="text-align: center; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+            <h3>Alliance for New Nigeria (ANN)</h3>
+            <h4>Password Reset</h4>
+            <br /> 
+            Hi [MEMBER_NAME],
+            <br />
+            You have requested to reset your password.<br />
+            Follow the link below to continue.
+            <br />
+            <br />
+            <br />
+            <a style="background-color:#2a90bd; color: #fff; padding: 10px 30px; margin: 20px 10px; text-decoration:none" href="[RESET_URL]">Reset Password</a>
+            <br />
+            <br />
+            <p style="font-style:italic">For Enquiries and Support contact us on<br />
+            <a href="mailto:support@alliancefornewnigeria.org">support@alliancefornewnigeria.org/</a><br /></p>
+        </div>
+    </form>
+</body>
+</html>`;
+
+
 const memberMail = `<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
@@ -159,6 +204,7 @@ export {
   sendActivationMail,
   isEmpty,
   sendMemberMail,
+  sendResetMail,
   generateMemberID,
   generatePernamentMemberID
 };
