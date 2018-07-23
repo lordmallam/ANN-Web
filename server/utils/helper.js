@@ -153,7 +153,7 @@ const resetMail = `<html xmlns="http://www.w3.org/1999/xhtml">
             <h3>Alliance for New Nigeria (ANN)</h3>
             <h4>Password Reset</h4>
             <br /> 
-            Hi [MEMBER_NAME],
+            Hello,
             <br />
             You have requested to reset your password.<br />
             Follow the link below to continue.

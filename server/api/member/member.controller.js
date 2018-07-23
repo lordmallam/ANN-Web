@@ -130,6 +130,6 @@ export const passwordReset = (req, res, next) => {
       res.send(`Password reset for ${r.name}`)
     })
     .catch(err => {
-      next(err)
+      res.status(500).send(err.response.data)
     })
 }
