@@ -8,7 +8,8 @@
 import {
   allProspects,
   approveProspect,
-  declineProspect
+  declineProspect,
+  newProspect
 } from './prospect.model';
 
 // Gets a list of Prospects
@@ -31,3 +32,10 @@ export function decline(req, res, next) {
     .then(res.json.bind(res))
     .catch(next);
 }
+
+export const add = (req, res, next) => {
+  const payload = req.body;
+  newProspect(payload)
+    .then(res.json.bind(res))
+    .catch(next);
+};

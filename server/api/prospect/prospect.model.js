@@ -54,4 +54,38 @@ const declineProspect = Id => (new Promise((resolve, reject) => {
     .catch(err => reject(err))
 }));
 
-export { allProspects, approveProspect, declineProspect };
+const newProspect = user => (new Promise((resolve, reject) => {
+  if (validateUser(user)) {
+    getView(DB_VIEWS.prospect.byEmail, user.email)
+      .then(res => {
+        if (res.length) {
+          reject(new BadRequestError('A member has already applied with the provided email'))
+        } else {
+          let memberDoc = user;
+          memberDoc.doc_type = DOC_TYPES.prospect;
+          saveDoc(memberDoc, true)
+            .then(res => {
+              resolve(res);
+            })
+            .catch(err => reject(err));
+        }
+      })
+      .catch(err => {
+        reject(err);
+      });
+  } else {
+    reject(new BadRequestError('Invalid member information'));
+  }
+}));
+
+const validateUser = user => {
+  if (!user) {
+    return false;
+  }
+  if (!user.email || !user.firstname || !user.surname) {
+    return false;
+  }
+  return true;
+};
+
+export { allProspects, approveProspect, declineProspect, newProspect };
