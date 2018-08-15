@@ -78,6 +78,18 @@ const newProspect = user => (new Promise((resolve, reject) => {
   }
 }));
 
+const getById = id => (new Promise((resolve, reject) => {
+  getViewWithAttachments(DB_VIEWS.prospect.byId, id, true, true)
+    .then(res => {
+      if (res.length) {
+        resolve(_.first(res).doc);
+      } else {
+        reject(new NotFoundError('No such member registered'));
+      }
+    })
+    .catch(err => reject(err));
+}));
+
 const validateUser = user => {
   if (!user) {
     return false;
@@ -88,4 +100,4 @@ const validateUser = user => {
   return true;
 };
 
-export { allProspects, approveProspect, declineProspect, newProspect };
+export { allProspects, approveProspect, declineProspect, newProspect, getById };
